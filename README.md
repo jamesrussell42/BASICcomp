@@ -1,7 +1,7 @@
 BASIC Comp
 ==============
 
-arduino_BASIC - Arduino Basic with vitasam changes for serial input and 16x2 LCD. Robinh Edwards - https://github.com/robinhedwards/ArduinoBASIC 
+arduino_BASIC - Arduino Basic with vitasam changes for serial input and 16x2 LCD. Robinh Edwards - https://github.com/robinhedwards/ - Vitasam - https://github.com/vitasam/
 
 TinyBasicPlus - Tiny Basic Plus - BleuLlama - https://github.com/BleuLlama/TinyBasicPlus
 
