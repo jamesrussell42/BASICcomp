@@ -1,9 +1,9 @@
 BASIC Comp
 ==============
 
-arduino_BASIC - Copy of Arduino Basic with vitasam changes for serial input and 16x2 LCD.
+arduino_BASIC - Arduino Basic with vitasam changes for serial input and 16x2 LCD. Robinh Edwards - https://github.com/robinhedwards/ArduinoBASIC 
 
-TinyBasicPlus - Copy of Tiny Basic Plus - Unchanged from source
+TinyBasicPlus - Tiny Basic Plus - BleuLlama - https://github.com/BleuLlama/TinyBasicPlus
 
 C64-serial-keyboard2 - Take C64 Keyboard input and Output Serial data
 
