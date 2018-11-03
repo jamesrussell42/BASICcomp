@@ -3,18 +3,22 @@
 #include "config.h"
 #include <stdint.h>
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
 #define LCD_SERIAL_ADDRESS                      0x27
 #define SCREEN_WIDTH                            16
 #define SCREEN_HEIGHT                           2
 #define CURSOR_CHR                              255
 #endif
 
-#ifdef SERIAL_TERM_IN_USE
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+#define SCREEN_WIDTH                            20
+#define SCREEN_HEIGHT                           16
+#define CURSOR_CHR                              95
+#endif
+
 #define SERIAL_DELETE                           127
 #define SERIAL_CR                               13
 #define SERIAL_ESC                              27
-#endif
 
 #ifdef BUZZER_IN_USE
 #define BUZZER_PIN    0    // TODO

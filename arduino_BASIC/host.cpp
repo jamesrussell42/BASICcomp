@@ -1,16 +1,22 @@
 #include "config.h"
 #include "host.h"
 #include "basic.h"
-
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
 #include <Arduino.h>
-#include <LiquidCrystal_I2C.h>
 #include <avr/pgmspace.h>
-#endif
 
 #include <EEPROM.h>
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#if defined (I2C_LCD1602_LCD_16x2_DISPLAY) && defined (ANSI_VT220_TERMINAL_OUTPUT)
+#error Only one output method should be defined!
+#endif
+
+#if defined (ANSI_VT220_TERMINAL_OUTPUT) || defined (ANSI_VT220_TERMINAL_INPUT)
+#include <BasicTerm.h>
+extern BasicTerm term;
+#endif
+
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#include <LiquidCrystal_I2C.h>
 extern LiquidCrystal_I2C lcd;
 #endif
 
@@ -51,17 +57,21 @@ ISR(TIMER1_OVF_vect)
     redraw = 1;
 }
 
-
-
 void host_init(int buzzerPin) 
 {
 #ifdef BUZZER_IN_USE
     buzPin = buzzerPin;
 #endif
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
     lcd.clear();
     lcd.setCursor(0, 0);
+#endif
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+    term.init();
+    term.cls();
+    term.show_cursor(false);
 #endif
 
 #ifdef BUZZER_IN_USE
@@ -159,9 +169,14 @@ void host_showBuffer()
         if (lineDirty[y] || (inputMode && y == curY))
         {
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
             lcd.setCursor(0, y);
 #endif
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+            term.position(y, 0);
+#endif
+
             for (int x = 0; x < SCREEN_WIDTH; x++)
             {
                 char c = screenBuffer[y * SCREEN_WIDTH + x];
@@ -171,9 +186,12 @@ void host_showBuffer()
                 if (x == curX && y == curY && inputMode && flash)
                     c = CURSOR_CHR;
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
                 lcd.print(c);
-                Serial.write(c);
+#endif
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+                term.print(c);
 #endif
             }
 
@@ -318,6 +336,7 @@ void host_newLine()
 char *host_readLine()
 {
     inputMode = 1;
+    char c;
 
     if (curX == 0) 
         memset(screenBuffer + SCREEN_WIDTH * (curY), 32, SCREEN_WIDTH);
@@ -330,7 +349,7 @@ char *host_readLine()
 
     while (!done) 
     {
-#ifdef SERIAL_TERM_IN_USE
+#ifdef ANSI_VT220_TERMINAL_INPUT
         while(Serial.available() > 0)
 #endif
         {
@@ -340,8 +359,8 @@ char *host_readLine()
             // Read the next key
             lineDirty[pos / SCREEN_WIDTH] = 1;
 
-#ifdef SERIAL_TERM_IN_USE
-            char c = Serial.read();
+#ifdef ANSI_VT220_TERMINAL_INPUT
+            char c = term.get_key();
 
             if (c >= 32 && c <= 126)
                 screenBuffer[pos++] = c;
