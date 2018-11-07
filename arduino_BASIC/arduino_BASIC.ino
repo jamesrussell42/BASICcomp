@@ -2,13 +2,13 @@
 #include "basic.h"
 #include "host.h"
 #include <EEPROM.h>
-
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
-#include <SPI.h>
-#include <LiquidCrystal_I2C.h>
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+#include <BasicTerm.h>
 #endif
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#include <SPI.h>
+#include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(LCD_SERIAL_ADDRESS, SCREEN_WIDTH, SCREEN_HEIGHT);
 #endif
 
@@ -18,17 +18,21 @@ unsigned char mem[MEMORY_SIZE];
 unsigned char tokenBuf[TOKEN_BUF_SIZE];
 
 const char welcomeStr[] PROGMEM = "Arduino BASIC";
-const char verStr[] PROGMEM = "Ver.0.51";
+const char verStr[] PROGMEM = "Ver.0.52";
 char autorun = 0;
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
+BasicTerm term(&Serial);
+#endif
 
 void setup() 
 {
-#ifdef SERIAL_TERM_IN_USE
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
     Serial.begin(9600);
     while (!Serial);
 #endif
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY_IN_USE
+#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
     lcd.init();
 #endif
 
