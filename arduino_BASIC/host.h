@@ -3,10 +3,17 @@
 #include "config.h"
 #include <stdint.h>
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#ifdef I2C_LCD_16x2_DISPLAY
 #define LCD_SERIAL_ADDRESS                      0x27
 #define SCREEN_WIDTH                            16
 #define SCREEN_HEIGHT                           2
+#define CURSOR_CHR                              255
+#endif
+
+#ifdef I2C_LCD_20x4_DISPLAY
+#define LCD_SERIAL_ADDRESS                      0x27
+#define SCREEN_WIDTH                            20
+#define SCREEN_HEIGHT                           4
 #define CURSOR_CHR                              255
 #endif
 

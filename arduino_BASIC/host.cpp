@@ -6,16 +6,28 @@
 
 #include <EEPROM.h>
 
-#if defined (I2C_LCD1602_LCD_16x2_DISPLAY) && defined (ANSI_VT220_TERMINAL_OUTPUT)
+#if defined (I2C_LCD_16x2_DISPLAY) && defined (ANSI_VT220_TERMINAL_OUTPUT)
 #error Only one output method should be defined!
 #endif
 
-#if defined (ANSI_VT220_TERMINAL_OUTPUT) || defined (ANSI_VT220_TERMINAL_INPUT)
+#if defined (I2C_LCD_20x4_DISPLAY) && defined (ANSI_VT220_TERMINAL_OUTPUT)
+#error Only one output method should be defined!
+#endif
+
+#if defined (I2C_LCD_16x2_DISPLAY) && defined (I2C_LCD_20x4_DISPLAY)
+#error Only one output method should be defined!
+#endif
+
+#if defined (ANSI_VT220_TERMINAL_INPUT) && defined (SERIAL_TERMINAL_INPUT)
+#error Only one input method should be defined!
+#endif
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
 #include <BasicTerm.h>
 extern BasicTerm term;
 #endif
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#if defined (I2C_LCD_16x2_DISPLAY) || defined (I2C_LCD_20x4_DISPLAY)
 #include <LiquidCrystal_I2C.h>
 extern LiquidCrystal_I2C lcd;
 #endif
@@ -49,7 +61,6 @@ void initTimers()
     interrupts();               // Enable all interrupts
 }
 
-
 ISR(TIMER1_OVF_vect)     
 {
     TCNT1 = timer1_counter;     // preload timer
@@ -63,13 +74,16 @@ void host_init(int buzzerPin)
     buzPin = buzzerPin;
 #endif
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#if defined (I2C_LCD_16x2_DISPLAY) || defined (I2C_LCD_20x4_DISPLAY)
     lcd.clear();
     lcd.setCursor(0, 0);
 #endif
 
-#ifdef ANSI_VT220_TERMINAL_OUTPUT
+#if defined (ANSI_VT220_TERMINAL_OUTPUT) || defined (ANSI_VT220_TERMINAL_INPUT)
     term.init();
+#endif
+
+#ifdef ANSI_VT220_TERMINAL_OUTPUT
     term.cls();
     term.show_cursor(false);
 #endif
@@ -169,7 +183,7 @@ void host_showBuffer()
         if (lineDirty[y] || (inputMode && y == curY))
         {
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#if defined (I2C_LCD_16x2_DISPLAY) || defined (I2C_LCD_20x4_DISPLAY)
             lcd.setCursor(0, y);
 #endif
 
@@ -186,7 +200,7 @@ void host_showBuffer()
                 if (x == curX && y == curY && inputMode && flash)
                     c = CURSOR_CHR;
 
-#ifdef I2C_LCD1602_LCD_16x2_DISPLAY
+#if defined (I2C_LCD_16x2_DISPLAY) || defined (I2C_LCD_20x4_DISPLAY)
                 lcd.print(c);
 #endif
 
@@ -349,7 +363,7 @@ char *host_readLine()
 
     while (!done) 
     {
-#ifdef ANSI_VT220_TERMINAL_INPUT
+#if defined (ANSI_VT220_TERMINAL_INPUT) || defined (SERIAL_TERMINAL_INPUT)
         while(Serial.available() > 0)
 #endif
         {
@@ -361,7 +375,13 @@ char *host_readLine()
 
 #ifdef ANSI_VT220_TERMINAL_INPUT
             char c = term.get_key();
+#endif
 
+#ifdef SERIAL_TERMINAL_INPUT
+            char c = Serial.read();
+#endif
+
+#if defined (ANSI_VT220_TERMINAL_INPUT) || defined (SERIAL_TERMINAL_INPUT)
             if (c >= 32 && c <= 126)
                 screenBuffer[pos++] = c;
             else if (c == SERIAL_DELETE && pos > startPos)

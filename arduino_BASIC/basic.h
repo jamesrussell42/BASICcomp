@@ -64,48 +64,48 @@
 #define TOKEN_SAVE              60
 #define TOKEN_LOAD              61
 #define TOKEN_PINREAD           62
-#define TOKEN_ANALOGRD          63
-#define TOKEN_DIR               64
-#define TOKEN_DELETE            65
+#define TOKEN_ANALOGRD              63
+#define TOKEN_DIR                   64
+#define TOKEN_DELETE                65
 
-#define FIRST_IDENT_TOKEN 23
-#define LAST_IDENT_TOKEN 65
+#define FIRST_IDENT_TOKEN           23
+#define LAST_IDENT_TOKEN            65
 
-#define FIRST_NON_ALPHA_TOKEN    8
-#define LAST_NON_ALPHA_TOKEN    22
+#define FIRST_NON_ALPHA_TOKEN       8
+#define LAST_NON_ALPHA_TOKEN        22
 
-#define ERROR_NONE				0
+#define ERROR_NONE				    0
 // parse errors
 #define ERROR_LEXER_BAD_NUM			1
-#define ERROR_LEXER_TOO_LONG			2
+#define ERROR_LEXER_TOO_LONG		2
 #define ERROR_LEXER_UNEXPECTED_INPUT	        3
 #define ERROR_LEXER_UNTERMINATED_STRING         4
-#define ERROR_EXPR_MISSING_BRACKET		5
-#define ERROR_UNEXPECTED_TOKEN			6
-#define ERROR_EXPR_EXPECTED_NUM			7
-#define ERROR_EXPR_EXPECTED_STR			8
-#define ERROR_LINE_NUM_TOO_BIG			9
+#define ERROR_EXPR_MISSING_BRACKET	5
+#define ERROR_UNEXPECTED_TOKEN		6
+#define ERROR_EXPR_EXPECTED_NUM		7
+#define ERROR_EXPR_EXPECTED_STR		8
+#define ERROR_LINE_NUM_TOO_BIG		9
 // runtime errors
 #define ERROR_OUT_OF_MEMORY			10
 #define ERROR_EXPR_DIV_ZERO			11
-#define ERROR_VARIABLE_NOT_FOUND		12
-#define ERROR_UNEXPECTED_CMD			13
+#define ERROR_VARIABLE_NOT_FOUND	12
+#define ERROR_UNEXPECTED_CMD		13
 #define ERROR_BAD_LINE_NUM			14
 #define ERROR_BREAK_PRESSED			15
-#define ERROR_NEXT_WITHOUT_FOR			16
-#define ERROR_STOP_STATEMENT			17
+#define ERROR_NEXT_WITHOUT_FOR		16
+#define ERROR_STOP_STATEMENT		17
 #define ERROR_MISSING_THEN			18
-#define ERROR_RETURN_WITHOUT_GOSUB		19
+#define ERROR_RETURN_WITHOUT_GOSUB	19
 #define ERROR_WRONG_ARRAY_DIMENSIONS	        20
 #define ERROR_ARRAY_SUBSCRIPT_OUT_RANGE	        21
 #define ERROR_STR_SUBSCRIPT_OUT_RANGE	        22
 #define ERROR_IN_VAL_INPUT			23
-#define ERROR_BAD_PARAMETER                     24
+#define ERROR_BAD_PARAMETER         24
 
-#define MAX_IDENT_LEN	8
-#define MAX_NUMBER_LEN	10
+#define MAX_IDENT_LEN	            8
+#define MAX_NUMBER_LEN	            10
 
-#define MEMORY_SIZE	1024
+#define MEMORY_SIZE	                1024
 extern unsigned char mem[];
 extern int sysPROGEND;
 extern int sysSTACKSTART;
